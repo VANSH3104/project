@@ -4,9 +4,10 @@ interface HeaderProps {
     siteName: string;
     userAvatar: string | null;
     onCreateClick: () => void;
+    userId?: string
 }
 
-export const Header = ({ siteName, userAvatar, onCreateClick }: HeaderProps) => {
+export const Header = ({ siteName, userAvatar, onCreateClick , userId }: HeaderProps) => {
     return (
         <header className="bg-white shadow-md py-4 px-6 flex items-center justify-between">
             <div className="flex items-center">
@@ -20,7 +21,7 @@ export const Header = ({ siteName, userAvatar, onCreateClick }: HeaderProps) => 
                 >
                     Create
                 </button>
-                {userAvatar && <Avatar icon={userAvatar} />}
+                {userAvatar && <Avatar icon={userAvatar} blogId={userId} />}
             </div>
         </header>
     );

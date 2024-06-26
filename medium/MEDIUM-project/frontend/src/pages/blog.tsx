@@ -1,55 +1,69 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
-import { BlogCard } from "../component/BlogCard";
-import { Header } from "../component/Header";
+import { BlogCard } from "../component/blogcard";
+import { Header } from "../component/header";
+import { useNavigate } from "react-router-dom";
+function getRandomDate(start: Date, end: Date): Date {
+    return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+}
 
-const Blog = () => {
-    const [blogs, setBlogs] = useState([]);
-    const [input, setInput] = useState("");
+function formatDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+const startDate = new Date(2020, 0, 1);
+const endDate = new Date(2024, 11, 31); 
+interface Bloging {
+    "title": string
+    "content": string
+    "id": string
+    "authorId": string
+}
+export const Blog = () => {
+    const navigate = useNavigate();
+    const [blogs, setBlogs] = useState<Bloging[]>([]);
 
     useEffect(() => {
         const fetchBlogs = async () => {
             try {
-                const response = await axios.get(`${BACKEND_URL}/api/v1/blog/bulk?filter=${input}`);
-                setBlogs(response.data.blogs);
+                const response = await axios.get(`${BACKEND_URL}/api/v1/blog/bulk`,{
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
+                });
+                
+                setBlogs(response.data);
             } catch (error) {
                 console.error("Error fetching blogs:", error);
-                // Handle error state if needed
             }
         };
 
         fetchBlogs();
-    }, [input]);
-
+    }, []);
     const handleCreateClick = () => {
-        // Example: Navigate to create blog form or show modal
-        console.log("Create button clicked");
+        navigate("/create")
     };
 
     return (
         <div>
-            <Header siteName={"Medium"} userAvatar={"Jane Doe"} onCreateClick={handleCreateClick} />
-            <div className="pt-7">
-                <input
-                    onChange={(e) => setInput(e.target.value)}
-                    type="text"
-                    placeholder="Search title..."
-                    className="w-full px-2 py-1 border rounded border-slate-200"
-                />
-            </div>
+            <Header siteName={"Medium"} userAvatar={"User"} onCreateClick={handleCreateClick}  />
             <div className="mt-4">
-                {blogs.map(blog => (
+                {blogs.map(blog =>
                     <BlogCard 
-                        authorName={}
-                        title={blog.title}
-                        date={blog.date}
-                        content={blog.content}
-                    />
-                ))}
+                    authorName= "anonymous"
+                    title={blog.title}
+                    date= {formatDate(getRandomDate(startDate, endDate))}
+                    content={blog.content}
+                    keyId={blog.id}
+                    authorId={blog.authorId}
+                />
+
+                )}
             </div>
         </div>
     );
 };
-
-export default Blog;

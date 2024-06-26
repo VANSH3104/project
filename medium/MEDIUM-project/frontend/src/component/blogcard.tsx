@@ -1,25 +1,26 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import { BACKEND_URL } from "../config";
+import { useNavigate } from "react-router-dom";
 
 interface BlogCardProps {
     authorName: string;
     title: string;
     content: string;
     date: string;
+    keyId: string;
+    authorId:string
 }
 
 export const BlogCard = ({
     authorName,
     title,
     content,
-    date
+    date,
+    keyId
 }: BlogCardProps) => {
     return (
         <div className="flex items-center w-full py-7 px-7">
             <div className="rounded overflow-hidden bg-white content-around w-full">
                 <div className="flex items-center mb-3">
-                    <Avatar icon={authorName} />
+                    <Avatar icon={authorName} blogId={keyId} />
                     <div className="ml-4 text-slate-800 dark:text-slate-800">
                         {authorName} &middot; {date}
                     </div>
@@ -41,12 +42,16 @@ export const BlogCard = ({
 
 interface IconProps {
     icon: string;
+    blogId?: string;
 }
-
-export const Avatar = ({ icon }: IconProps) => {
+export const Avatar = ({ icon , blogId }: IconProps) => {
+    const navigate = useNavigate();
+    function click(){
+        navigate(`/show?id="${blogId}`)
+    }
     return (
-        <div className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-blue-500 rounded-full dark:bg-gray-600">
+        <button onClick={click} className="relative inline-flex items-center justify-center w-10 h-10 overflow-hidden bg-blue-500 rounded-full dark:bg-gray-600">
             <span className="font-medium text-white dark:text-gray-300">{icon[0]}</span>
-        </div>
+        </button>
     );
 }
