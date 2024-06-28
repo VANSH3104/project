@@ -57,25 +57,24 @@ const endDate = new Date(2024, 11, 31);
 
   return (
     <div className="blog-page">
-      <Header siteName="Medium" userAvatar="User" onCreateClick={handleCreateClick} />
-      
-      <div className="content-wrapper p-6 mt-4 rounded-lg shadow-lg h-screen bg-slate-100">
-        {blog ? (
-          <>
-            <div className="title-section flex items-center justify-between p-4 mb-1 font-extrabold text-5xl  rounded-lg ">
-              <h1 className="title ">{blog.title}</h1>
-            </div>
-            <div className="date-section text-gray-600 p-4 mb-4 text-slate-400">
-              {formatDate(getRandomDate(startDate, endDate))}
-            </div>
-            <div className="content-section p-4 rounded-lg">
-              <p className="content">{blog.content}</p>
-            </div>
-          </>
-        ) : (
-          <div>Loading...</div>
-        )}
-      </div>
-    </div>
+  <Header siteName="Medium" userAvatar="User" onCreateClick={handleCreateClick} prop="Create" />
+
+  <div className="content-wrapper p-6 mt-4 rounded-lg shadow-lg h-screen bg-slate-100">
+    {blog ? (
+      <>
+        <div className="title-section flex items-center justify-between p-4 mb-1 font-extrabold text-5xl rounded-lg">
+          <h1 className="title">{blog.title}</h1>
+        </div>
+        <div className="date-section text-gray-600 p-4 mb-4 text-slate-400">
+          {formatDate(getRandomDate(startDate, endDate))}
+        </div>
+        <div className="content-section p-4 rounded-lg" dangerouslySetInnerHTML={{ __html: blog.content }} />
+      </>
+    ) : (
+      <div>Loading...</div>
+    )}
+  </div>
+</div>
+
   );
 };

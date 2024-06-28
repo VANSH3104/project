@@ -36,7 +36,7 @@ export const Blog = () => {
                     }
                 });
                 
-                setBlogs(response.data);
+                setBlogs(response.data.reverse());
             } catch (error) {
                 console.error("Error fetching blogs:", error);
             }
@@ -50,7 +50,7 @@ export const Blog = () => {
 
     return (
         <div>
-            <Header siteName={"Medium"} userAvatar={"User"} onCreateClick={handleCreateClick}  />
+            <Header siteName={"Medium"} userAvatar={"User"} onCreateClick={handleCreateClick}  prop={"Create"} />
             <div className="mt-4">
                 {blogs.map(blog =>
                     <BlogCard 
